@@ -1,7 +1,7 @@
 name: flexseq_trim
 channels:
-  - bioconda
   - conda-forge
-  - defaults
+  - bioconda
+  - nodefaults
 dependencies:
   - fastp=0.23.*

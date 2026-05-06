@@ -1,8 +1,8 @@
 name: flexseq_qc
 channels:
-  - bioconda
   - conda-forge
-  - defaults
+  - bioconda
+  - nodefaults
 dependencies:
   - fastqc=0.12.*
-  - multiqc=1.25.*
+  - multiqc
