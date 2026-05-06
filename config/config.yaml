@@ -40,6 +40,7 @@ fastp:
   qualified_quality_phred: 20   # minimum base quality
   cut_window_size: 4      # sliding window size for quality trimming
   cut_mean_quality: 20    # mean quality threshold in window
+  trim_poly_g: true       # remove polyG tails (NovaSeq 2-channel artifact, confirmed in FastQC)
 
 # Alignment ----------------------------------------------------
 bwa:
