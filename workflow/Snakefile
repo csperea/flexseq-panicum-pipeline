@@ -1,0 +1,25 @@
+configfile: "config/config.yaml"
+
+SAMPLES = list(config["samples"].keys())
+
+include: "rules/qc.smk"
+include: "rules/trim.smk"
+include: "rules/align.smk"
+include: "rules/variants.smk"
+include: "rules/filter.smk"
+
+
+rule all:
+    input:
+        # QC on raw reads
+        expand("results/qc/fastqc/{sample}_{read}_fastqc.html",
+               sample=SAMPLES, read=["R1", "R2"]),
+        "results/qc/multiqc_raw/multiqc_report.html",
+        # Trimmed reads QC
+        "results/qc/multiqc_trimmed/multiqc_report.html",
+        # Aligned BAMs
+        expand("results/align/{sample}.sorted.bam.bai", sample=SAMPLES),
+        # Alignment QC
+        "results/qc/multiqc_align/multiqc_report.html",
+        # Final filtered VCF
+        "results/variants/filtered.vcf.gz",

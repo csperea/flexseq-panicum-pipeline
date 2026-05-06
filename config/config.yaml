@@ -1,0 +1,59 @@
+# ──────────────────────────────────────────────────────────────
+# FlexSeq Panicum maximum genotyping pipeline
+# LGC / RAPiD-Genomics amplicon sequencing → FreeBayes VCF
+# ──────────────────────────────────────────────────────────────
+
+# Paths --------------------------------------------------------
+data_dir: "/opt/GeneticProfilingForagesSelection-catalogue/1.Data/MDSP_LGC_Results/fastq/panicum"
+reference: "/opt/GeneticProfilingForagesSelection-catalogue/1.Data/References/panicum/GuineaGrass.4haplotypes.CHROMOSOMES.fasta.gz"
+results_dir: "results"
+
+# Samples ------------------------------------------------------
+# Short ID (well position) → file prefix (without _R1/R2_001.fastq.gz)
+samples:
+  WG04: "RAPiD-Genomics_F668_CTA_202001_P001_WG04_i5-281_i7-268_S76_L008"
+  WG05: "RAPiD-Genomics_F668_CTA_202001_P001_WG05_i5-281_i7-269_S50_L008"
+  WG06: "RAPiD-Genomics_F668_CTA_202001_P001_WG06_i5-281_i7-270_S69_L008"
+  WG07: "RAPiD-Genomics_F668_CTA_202001_P001_WG07_i5-281_i7-271_S91_L008"
+  WG08: "RAPiD-Genomics_F668_CTA_202001_P001_WG08_i5-281_i7-272_S74_L008"
+  WG09: "RAPiD-Genomics_F668_CTA_202001_P001_WG09_i5-281_i7-273_S56_L008"
+  WG10: "RAPiD-Genomics_F668_CTA_202001_P001_WG10_i5-281_i7-274_S72_L008"
+  WG11: "RAPiD-Genomics_F668_CTA_202001_P001_WG11_i5-281_i7-275_S75_L008"
+  WG12: "RAPiD-Genomics_F668_CTA_202001_P001_WG12_i5-281_i7-276_S85_L008"
+  WH01: "RAPiD-Genomics_F668_CTA_202001_P001_WH01_i5-281_i7-277_S59_L008"
+  WH02: "RAPiD-Genomics_F668_CTA_202001_P001_WH02_i5-281_i7-278_S68_L008"
+  WH03: "RAPiD-Genomics_F668_CTA_202001_P001_WH03_i5-281_i7-279_S61_L008"
+  WH04: "RAPiD-Genomics_F668_CTA_202001_P001_WH04_i5-281_i7-280_S84_L008"
+  WH05: "RAPiD-Genomics_F668_CTA_202001_P001_WH05_i5-281_i7-281_S86_L008"
+  WH06: "RAPiD-Genomics_F668_CTA_202001_P001_WH06_i5-281_i7-282_S65_L008"
+  WH07: "RAPiD-Genomics_F668_CTA_202001_P001_WH07_i5-281_i7-283_S67_L008"
+  WH08: "RAPiD-Genomics_F668_CTA_202001_P001_WH08_i5-281_i7-284_S89_L008"
+  WH09: "RAPiD-Genomics_F668_CTA_202001_P001_WH09_i5-281_i7-285_S94_L008"
+  WH10: "RAPiD-Genomics_F668_CTA_202001_P001_WH10_i5-281_i7-286_S71_L008"
+  WH11: "RAPiD-Genomics_F668_CTA_202001_P001_WH11_i5-281_i7-287_S93_L008"
+  WH12: "RAPiD-Genomics_F668_CTA_202001_P001_WH12_i5-281_i7-288_S57_L008"
+
+# fastp trimming -----------------------------------------------
+fastp:
+  min_length: 50          # discard reads shorter than this after trimming
+  qualified_quality_phred: 20   # minimum base quality
+  cut_window_size: 4      # sliding window size for quality trimming
+  cut_mean_quality: 20    # mean quality threshold in window
+
+# Alignment ----------------------------------------------------
+bwa:
+  extra: "-M"             # -M marks split-hit as secondary (required by some downstream tools)
+  threads: 8
+
+# Variant calling ----------------------------------------------
+freebayes:
+  ploidy: 4               # Panicum maximum is tetraploid (2n=4x=32)
+  min_coverage: 10        # minimum read depth at a site to call variants
+  min_alternate_fraction: 0.1   # min fraction of reads supporting alt allele
+  min_alternate_count: 3  # min number of reads supporting alt allele
+
+# VCF filtering ------------------------------------------------
+filter:
+  min_qual: 20            # minimum QUAL score
+  min_depth: 10           # minimum DP across all samples
+  max_missing: 0.2        # maximum fraction of missing genotypes per site (20%)

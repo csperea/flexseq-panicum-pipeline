@@ -1,0 +1,8 @@
+name: flexseq_align
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - bwa-mem2=2.2.*
+  - samtools=1.22.*
